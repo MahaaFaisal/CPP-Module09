@@ -1,6 +1,7 @@
 CPP = c++
-CPPFLAGS = -Wall -Wextra -Werror
-SRCS = main.cpp BitcoinExchange.cpp
+CPPFLAGS = -Wfatal-errors #-Wall -Wextra -Werror
+SRCS = main.cpp\
+		BitcoinExchange.cpp
 NAME = btc
 
 all: $(NAME)
@@ -15,20 +16,3 @@ fclean: clean
 	rm -rf $(NAME)
 
 re: clean all
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
