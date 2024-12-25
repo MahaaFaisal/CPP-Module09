@@ -2,12 +2,12 @@
 
 BitcoinExchange::BitcoinExchange()
 {
-	_parseDb("data.csv");
+	_parseDb("data.csv", ',');
 }
 
 BitcoinExchange::BitcoinExchange(char *db)
 {
-	_parseDb(db);
+	_parseDb(db, ',');
 }
 BitcoinExchange::BitcoinExchange(BitcoinExchange &other)
 {
@@ -25,10 +25,10 @@ BitcoinExchange::~BitcoinExchange()
 	// should I do something?
 }
 
-double	BitcoinExchange::_parseValue(std::string valueString)
+float	BitcoinExchange::_parseValue(std::string valueString)
 {
 	char *remaining;
-	double value = strtod(valueString.c_str(), &remaining);
+	float value = strtof(valueString.c_str(), &remaining);
 	if (*remaining != '\0')
 		throw std::bad_exception();
 	return (value);
@@ -42,23 +42,21 @@ void	BitcoinExchange::_parseDate(std::string date)
 	int month;
 	char delimeter2 (0);
 	int day;
+	char endline (0);
+
 	std::stringstream dateStream(date);
 
 	if (dateStream.fail())
 		throw std::bad_exception();
-	std::cout << "(" << date << ")\n";
-	if (date.length() != 10 || date[4] != '-' || date[7] != '-')
-		throw std::runtime_error("bad date format");
-	// dateStream >> year >> delimeter1 >> month >> delimeter2 >> day;
-	// getline(dateStream, year, '-');
-	// std::cout << year << " ";
-	// getline(dateStream, month, '-');
-	// std::cout << month << " ";
-	// getline(dateStream, day);
-	// std::cout << day << " ";
+	dateStream >> std::noskipws;
+	dateStream >> year >> delimeter1 >> month >> delimeter2 >> day;
+	if (dateStream.fail() || delimeter1 != '-' || delimeter2 != '-' || !dateStream.eof())
+		throw std::bad_exception();
+	std::cout << year << '-' << month << '-' << day << '\n'; 
+
 }
 
-void	BitcoinExchange::_parseDb(std::string db)
+void	BitcoinExchange::_parseDb(std::string db, char delimeter)
 {
 	std::fstream dbStream(db);
 	std::string date;
@@ -68,17 +66,16 @@ void	BitcoinExchange::_parseDb(std::string db)
 		throw std::bad_exception();
 
 	std::string line;
-	dbStream >> line;
+	getline(dbStream, line, '\n');
 	if (line != "date,exchange_rate")
 		throw std::bad_exception();
-
 	while (!dbStream.eof())
 	{
-		getline(dbStream, date, ',');
+		getline(dbStream, date, delimeter);
 		_parseDate(date);
-		getline(dbStream, xrateString);
+		getline(dbStream, xrateString, '\n');
 		std::cout << xrateString << " ";
-		double xrate = _parseValue(xrateString);
+		float xrate = _parseValue(xrateString);
 		std::cout << xrate << std::endl;
 		_exchangeDb[date] = xrate;
 	}

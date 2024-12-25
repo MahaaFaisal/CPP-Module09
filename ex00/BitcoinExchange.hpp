@@ -11,10 +11,10 @@
 class BitcoinExchange
 {
 	private:
-		std::map<std::string, double> _exchangeDb;
-		void	_parseDb(std::string db);
+		std::map<std::string, float> _exchangeDb;
+		void	_parseDb(std::string db, char delimeter);
 		void	_parseDate(std::string date);
-		double	_parseValue(std::string valueString);
+		float	_parseValue(std::string valueString);
 
 	public:
 		BitcoinExchange();
