@@ -14,7 +14,8 @@ class BitcoinExchange
 		std::map<std::string, float> _exchangeDb;
 		void	_parseDb(std::string db, char delimeter);
 		void	_parseDate(std::string date);
-		float	_parseValue(std::string valueString);
+		double	_parseValue(std::string valueString);
+		void _checkDateValidity(int year, int month, int day);
 
 	public:
 		BitcoinExchange();

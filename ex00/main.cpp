@@ -24,8 +24,6 @@ int	main(int argc, char **argv)
 {
 	(void)argv;
 
-	char db[] = "data.csv";
-
 	if (argc != 2)
 	{
 		std::cerr << "should have only .txt argument\n";
@@ -40,5 +38,4 @@ int	main(int argc, char **argv)
 	{
 		std::cerr << e.what() << '\n';
 	}
-	
 }

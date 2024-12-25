@@ -1,4 +1,5 @@
 #include "BitcoinExchange.hpp"
+#include <vector>
 
 BitcoinExchange::BitcoinExchange()
 {
@@ -25,13 +26,46 @@ BitcoinExchange::~BitcoinExchange()
 	// should I do something?
 }
 
-float	BitcoinExchange::_parseValue(std::string valueString)
+double	BitcoinExchange::_parseValue(std::string valueString)
 {
-	char *remaining;
-	float value = strtof(valueString.c_str(), &remaining);
-	if (*remaining != '\0')
+	std::stringstream valueStream(valueString);
+
+	double value;
+
+	valueStream >> std::noskipws;
+
+	if (valueStream.fail())
 		throw std::bad_exception();
-	return (value);
+	valueStream >> value;
+	if (valueStream.fail() || !valueStream.eof())
+		throw std::bad_exception();
+	return value;
+	// char *remaining;
+	// double value = strtof(valueString.c_str(), &remaining);
+	// if (*remaining != '\0')
+	// 	throw std::bad_exception();
+	// return (value);
+}
+
+void BitcoinExchange::_checkDateValidity(int year, int month, int day)
+{
+	int longerMonthsArr [7] = {1, 3, 5, 7, 8, 10, 12};
+	std::vector<int> longerMonths(longerMonthsArr, longerMonthsArr + 7);
+	// should make it check for the current date not a hardcoded value.
+	if (year < 2009 || year > 2024
+		|| month < 1 || month > 12
+		|| day < 1 || day > 31)
+		std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
+	
+	else if (std::find(longerMonths.begin(), longerMonths.end(), month) == longerMonths.end()
+		&&	day == 31)
+		std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
+	else if (month == 2)
+	{
+		if ((year % 4 == 0 && day > 29)
+			|| (year % 4 != 0 && day > 28))
+		std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
+	}
 }
 
 
@@ -52,7 +86,8 @@ void	BitcoinExchange::_parseDate(std::string date)
 	dateStream >> year >> delimeter1 >> month >> delimeter2 >> day;
 	if (dateStream.fail() || delimeter1 != '-' || delimeter2 != '-' || !dateStream.eof())
 		throw std::bad_exception();
-	std::cout << year << '-' << month << '-' << day << '\n'; 
+	_checkDateValidity(year, month, day);
+	std::cout << year << '-' << month << '-' << day << '\n';
 
 }
 
@@ -75,8 +110,7 @@ void	BitcoinExchange::_parseDb(std::string db, char delimeter)
 		_parseDate(date);
 		getline(dbStream, xrateString, '\n');
 		std::cout << xrateString << " ";
-		float xrate = _parseValue(xrateString);
-		std::cout << xrate << std::endl;
-		_exchangeDb[date] = xrate;
+		_exchangeDb[date] = _parseValue(xrateString);
+		std::cout << std::setprecision(7) << _exchangeDb[date] << std::endl;
 	}
 }
