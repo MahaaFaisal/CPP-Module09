@@ -12,10 +12,12 @@ class BitcoinExchange
 {
 	private:
 		std::map<std::string, float> _exchangeDb;
+
 		void	_parseDb(std::string db, char delimeter);
 		void	_parseDate(std::string date);
 		double	_parseValue(std::string valueString);
 		void _checkDateValidity(int year, int month, int day);
+		std::string getClosestDate(std::string date);
 
 	public:
 		BitcoinExchange();
@@ -24,9 +26,9 @@ class BitcoinExchange
 		BitcoinExchange &operator=(BitcoinExchange &rhs);
 		~BitcoinExchange();
 
-
-		// get_closest_date(the other date)
-		// calculate value (date, value)
+		
+		void calculateValuesFile(std::string file);
+		void calculateValue(std::string date,double value);
 };
 
 #endif

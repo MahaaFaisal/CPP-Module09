@@ -32,7 +32,7 @@ int	main(int argc, char **argv)
 	try
 	{
 		BitcoinExchange exchange;
-		// parse_input(argv[1]);
+		exchange.calculateValuesFile(argv[1]);
 	}
 	catch(const std::exception& e)
 	{

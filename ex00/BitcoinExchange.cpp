@@ -40,6 +40,7 @@ double	BitcoinExchange::_parseValue(std::string valueString)
 	if (valueStream.fail() || !valueStream.eof())
 		throw std::bad_exception();
 	return value;
+
 	// char *remaining;
 	// double value = strtof(valueString.c_str(), &remaining);
 	// if (*remaining != '\0')
@@ -87,7 +88,6 @@ void	BitcoinExchange::_parseDate(std::string date)
 	if (dateStream.fail() || delimeter1 != '-' || delimeter2 != '-' || !dateStream.eof())
 		throw std::bad_exception();
 	_checkDateValidity(year, month, day);
-	std::cout << year << '-' << month << '-' << day << '\n';
 
 }
 
@@ -109,8 +109,64 @@ void	BitcoinExchange::_parseDb(std::string db, char delimeter)
 		getline(dbStream, date, delimeter);
 		_parseDate(date);
 		getline(dbStream, xrateString, '\n');
-		std::cout << xrateString << " ";
 		_exchangeDb[date] = _parseValue(xrateString);
-		std::cout << std::setprecision(7) << _exchangeDb[date] << std::endl;
 	}
+}
+
+void BitcoinExchange::calculateValuesFile(std::string file)
+{
+	std::fstream dbStream(file);
+	std::string date;
+	std::string valueString;
+	double		value;
+
+	if (dbStream.fail())
+		throw std::bad_exception();
+	std::string line;
+	getline(dbStream, line, '\n');
+	if (line != "date | value")
+		throw std::bad_exception();
+	while (!dbStream.eof())
+	{
+		getline(dbStream, line, '\n');
+		if (line.find(" | ") == std::string::npos)
+		{
+			std::cerr << "Error: bad input => " << line << std::endl;
+			continue;
+		}
+		date = line.substr(0, line.find(" | "));
+		try
+		{
+			_parseDate(date);
+			valueString = line.substr(line.find(" | ") + 3, line.length());
+			value = _parseValue(valueString);
+			if (value > 1000)
+			{
+				std::cerr << "Error: too large numebr" << std::endl;
+				continue;
+			}
+			calculateValue(date, value);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << "Error: bad input" << date << '\n';
+		}
+	}
+}
+
+void BitcoinExchange::calculateValue(std::string date, double value)
+{
+	// check return value of parse date
+	_parseDate(date);
+	if (date < "2009-01-02")
+		std::cerr << "Bitcoin was not born yet at " << date << std::endl;
+	else if (value < 0)
+		std::cerr << "Error: not a positive number." << std::endl;
+	else
+	{
+		std::map<std::string, float>::iterator it = _exchangeDb.begin();
+		for (it = _exchangeDb.begin(); it->first < date; ++it);
+		std::cout << date << " => " << value << " = " << value * it->second << std::endl;
+	}
+	
 }
