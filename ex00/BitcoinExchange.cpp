@@ -40,33 +40,31 @@ double	BitcoinExchange::_parseValue(std::string valueString)
 	if (valueStream.fail() || !valueStream.eof())
 		throw std::bad_exception();
 	return value;
-
-	// char *remaining;
-	// double value = strtof(valueString.c_str(), &remaining);
-	// if (*remaining != '\0')
-	// 	throw std::bad_exception();
-	// return (value);
 }
-
-void BitcoinExchange::_checkDateValidity(int year, int month, int day)
+// 1/2/2009
+bool BitcoinExchange::_checkDateValidity(int year, int month, int day)
 {
 	int longerMonthsArr [7] = {1, 3, 5, 7, 8, 10, 12};
 	std::vector<int> longerMonths(longerMonthsArr, longerMonthsArr + 7);
-	// should make it check for the current date not a hardcoded value.
 	if (year < 2009 || year > 2024
 		|| month < 1 || month > 12
-		|| day < 1 || day > 31)
+		|| day < 1 || day > 31
+		|| (std::find(longerMonths.begin(), longerMonths.end(), month) == longerMonths.end()
+		&&	day == 31))
+	{
 		std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
-	
-	else if (std::find(longerMonths.begin(), longerMonths.end(), month) == longerMonths.end()
-		&&	day == 31)
-		std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
+		return (0);
+	}
 	else if (month == 2)
 	{
 		if ((year % 4 == 0 && day > 29)
 			|| (year % 4 != 0 && day > 28))
-		std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
+		{
+			std::cerr << "Error: bad input => " << year << "-" << month << "-" << day << std::endl;
+			return (0);
+		}
 	}
+	return (1);
 }
 
 
@@ -85,9 +83,12 @@ void	BitcoinExchange::_parseDate(std::string date)
 		throw std::bad_exception();
 	dateStream >> std::noskipws;
 	dateStream >> year >> delimeter1 >> month >> delimeter2 >> day;
-	if (dateStream.fail() || delimeter1 != '-' || delimeter2 != '-' || !dateStream.eof())
-		throw std::bad_exception();
-	_checkDateValidity(year, month, day);
+	if (dateStream.fail() || delimeter1 != '-' || delimeter2 != '-'
+		|| !dateStream.eof())
+		throw std::invalid_argument("invalid stream");
+	if (_checkDateValidity(year, month, day) == 0)
+		throw std::invalid_argument("invalid date unfortunately");
+
 
 }
 
@@ -138,7 +139,7 @@ void BitcoinExchange::calculateValuesFile(std::string file)
 		try
 		{
 			_parseDate(date);
-			valueString = line.substr(line.find(" | ") + 3, line.length());
+			valueString = line.substr(line.find(" | ") + 3, line.length()); /// What if I have alot of spaces after this thing
 			value = _parseValue(valueString);
 			if (value > 1000)
 			{
@@ -164,8 +165,9 @@ void BitcoinExchange::calculateValue(std::string date, double value)
 		std::cerr << "Error: not a positive number." << std::endl;
 	else
 	{
-		std::map<std::string, float>::iterator it = _exchangeDb.begin();
-		for (it = _exchangeDb.begin(); it->first < date; ++it);
+		std::map<std::string, float>::iterator it = _exchangeDb.lower_bound(date); // lower_bound
+		if (it == _exchangeDb.end())
+			it--;
 		std::cout << date << " => " << value << " = " << value * it->second << std::endl;
 	}
 	

@@ -16,7 +16,7 @@ class BitcoinExchange
 		void	_parseDb(std::string db, char delimeter);
 		void	_parseDate(std::string date);
 		double	_parseValue(std::string valueString);
-		void _checkDateValidity(int year, int month, int day);
+		bool	_checkDateValidity(int year, int month, int day);
 		std::string getClosestDate(std::string date);
 
 	public:
@@ -26,7 +26,6 @@ class BitcoinExchange
 		BitcoinExchange &operator=(BitcoinExchange &rhs);
 		~BitcoinExchange();
 
-		
 		void calculateValuesFile(std::string file);
 		void calculateValue(std::string date,double value);
 };
