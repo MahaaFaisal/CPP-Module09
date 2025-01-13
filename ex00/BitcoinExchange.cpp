@@ -165,7 +165,7 @@ void BitcoinExchange::calculateValue(std::string date, double value)
 		std::cerr << "Error: not a positive number." << std::endl;
 	else
 	{
-		std::map<std::string, float>::iterator it = _exchangeDb.lower_bound(date); // lower_bound
+		std::map<std::string, float>::iterator it = _exchangeDb.lower_bound(date);
 		if (it == _exchangeDb.end())
 			it--;
 		std::cout << date << " => " << value << " = " << value * it->second << std::endl;
