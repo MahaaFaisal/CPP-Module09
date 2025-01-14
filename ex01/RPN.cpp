@@ -12,6 +12,7 @@ RPN::RPN(RPN &other)
 
 RPN &RPN::operator=(RPN &rhs)
 {
+	(void) rhs;
 	return (*this);
 }
 

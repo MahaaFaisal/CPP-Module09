@@ -1,5 +1,5 @@
 CPP = c++
-CPPFLAGS = -Wfatal-errors #-Wall -Wextra -Werror
+CPPFLAGS = -Wall -Wextra -Werror
 SRCS = main.cpp\
 		RPN.cpp
 NAME = RPN
