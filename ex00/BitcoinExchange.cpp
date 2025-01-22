@@ -12,11 +12,13 @@ BitcoinExchange::BitcoinExchange(char *db)
 }
 BitcoinExchange::BitcoinExchange(BitcoinExchange &other)
 {
+	(void)other;
 	// copy the db;
 }
 
 BitcoinExchange &BitcoinExchange::operator=(BitcoinExchange &rhs)
 {
+	(void)rhs;
 	return *this;
 	// copy db as well
 }
@@ -75,7 +77,6 @@ void	BitcoinExchange::_parseDate(std::string date)
 	int month;
 	char delimeter2 (0);
 	int day;
-	char endline (0);
 
 	std::stringstream dateStream(date);
 
@@ -150,7 +151,7 @@ void BitcoinExchange::calculateValuesFile(std::string file)
 		}
 		catch(const std::exception& e)
 		{
-			std::cerr << "Error: bad input" << date << '\n';
+			std::cerr << "Error: bad input =>" << date << '\n';
 		}
 	}
 }
