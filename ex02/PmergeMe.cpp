@@ -46,8 +46,7 @@ double PmergeMe::_getMicroseconds(clock_t t)
 	clock_t duration;
 
 	duration = clock() - t;
-	// std::cout << std::setprecision(4) << (float) duration / CLOCKS_PER_SEC  << std::endl;
-    return duration * 1000;
+    return (double)duration * 1000 / CLOCKS_PER_SEC;
 }
 
 void PmergeMe::pushToContainers(int num)
@@ -77,8 +76,8 @@ void	PmergeMe::_printAfterSort()
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
-	std::cout << "Time to process a range of " << _vector.size() << " elements with std::vector : " << std::setprecision(4) << _vectorDuration << " us\n";
-	std::cout << "Time to process a range of " << _list.size() << " elements with std::list : " << std::setprecision(4) << _listDuration << " us\n";
+	std::cout << "Time to process a range of " << _vector.size() << " elements with std::vector : " << std::setprecision(5) << _vectorDuration << " us\n";
+	std::cout << "Time to process a range of " << _list.size() << " elements with std::list : " << _listDuration << " us\n";
 }
 
 void PmergeMe::sortContainers()
