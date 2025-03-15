@@ -6,28 +6,43 @@
 # include <vector>
 # include <list>
 # include <time.h>
-#include <iomanip>
-
+# include <iomanip>
+# include <utility>
+# include <algorithm>
 
 class PmergeMe
 {
 	private:
+		int _n;
 		std::vector<int> _original;
-		std::list<int> _list;
-		std::vector<int> _vector;
-		float _listDuration;
-		float _vectorDuration;
-		class NotValidNumException : public std::exception
-		{
-			public:
-				const char* what() const throw();
-		};
 		double _getMicroseconds(clock_t t);
 		void	_printAfterSort();
 
+		std::list<int> _list;
+		float _listDuration;
+		typedef std::list<std::pair<int, int> > pairsList;
+		int	listLast;
+		void		_sortList();
+		pairsList	createListPairs();
+		void		l_sortEachPair(pairsList &listPairs);
+		// void		l_sortPairs(pairsList &listPairs);
+		// void		l_initializeMainChain(pairsList const &listPairs);
+		// void		l_initializePend(pairsList const &listPairs);
+		// void		l_insertPendToMainChain(std::list<int> pend, std::list<int> mainChain);
+
+		std::vector<int> _vector;
+		float _vectorDuration;
+		// typedef std::vector<pair<int, int>> pairsVector;
+		// void		_sortVector();
+		// pairsVector	createVectorPairs();
+		// void		v_sortEachPair(pairsVector &vectorPairs);
+		// void		v_sortPairs(pairsVector &vectorPairs);
+		// void		v_initializeMainChain(pairsVector const &VectorPairs);
+		// void		v_initializePend(pairsVector const &VectorPairs);
+		// void		v_insertPendToMainChain(std::vector<int> pend, std::vector<int> mainChain);
+
 	public:
 		PmergeMe();
-		PmergeMe(int argc, char **argv);
 		PmergeMe(PmergeMe &other);
 		PmergeMe &operator=(PmergeMe &rhs);
 		~PmergeMe();
@@ -35,6 +50,12 @@ class PmergeMe
 		void	pushToContainers(int num);
 		void	printContainers();
 		void	sortContainers();
+
+		class NotValidNumException : public std::exception
+		{
+			public:
+				const char* what() const throw();
+		};
 
 };
 
