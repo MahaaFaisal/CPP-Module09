@@ -104,6 +104,11 @@ void	PmergeMe::l_sortEachPair(pairsList &listPairs)
 	}
 }
 
+void	PmergeMe::l_mergeSortPairs(int begin, int end)
+{
+
+}
+
 void	PmergeMe::_sortList()
 {
 	clock_t t;
