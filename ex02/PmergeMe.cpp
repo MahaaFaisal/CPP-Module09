@@ -34,6 +34,7 @@ double	PmergeMe::_getMicroseconds(clock_t t)
 
 void	PmergeMe::pushToContainers(int num)
 {
+	// dont allow duplicates
 	if (num < 0)
 		throw (NotValidNumException());
 	_original.push_back(num);
@@ -104,9 +105,41 @@ void	PmergeMe::l_sortEachPair(pairsList &listPairs)
 	}
 }
 
-void	PmergeMe::l_mergeSortPairs(int begin, int end)
+void	PmergeMe::l_merge(pairsList &listPairs, int begin, int mid, int end)
 {
+	pairsList temp;
+	pairsList::iterator left = std::next(listPairs.begin(), begin);
+	pairsList::iterator midIt = std::next(listPairs.begin(), mid + 1);
+	pairsList::iterator right = midIt;
+	pairsList::iterator endIt = std::next(listPairs.begin(), end + 1);
 
+	while (left != midIt && right != endIt)
+	{
+		if (*left < *right)
+			temp.push_back(*(left++));
+		else
+			temp.push_back(*(right++));
+	}
+
+	while (left != midIt)
+		temp.push_back(*(left++));
+
+	while (right != endIt)
+		temp.push_back(*(right++));
+
+	pairsList::iterator it = std::next(listPairs.begin(), begin);
+	for (pairsList::iterator tempIt = temp.begin(); tempIt != temp.end(); ++tempIt)
+		*(it++) = *tempIt;
+}
+
+void	PmergeMe::l_mergeSortPairs(pairsList &listPairs, int begin, int end)
+{
+	if (begin >= end)
+		return ;
+	int	mid = (begin + end) / 2;
+	l_mergeSortPairs (listPairs, begin, mid);
+	l_mergeSortPairs (listPairs, mid + 1, end);
+	l_merge(listPairs, begin, mid, end);
 }
 
 void	PmergeMe::_sortList()
@@ -123,13 +156,19 @@ void	PmergeMe::_sortList()
 	listPairs = createListPairs();
 	// // sort pairs internally
 	l_sortEachPair(listPairs);
+	// // sort pairs externally (using merge sort)
 	pairsList::iterator pit;
 	for (pit = listPairs.begin(); pit != listPairs.end(); ++pit)
-		std::cout << (*pit).first << " " << (*pit).second << '\n';
+		std::cout << (*pit).first << " " << (*pit).second << "\n";
 	if (listLast != -1)
 		std:: cout << listLast << '\n';
-	// // sort pairs externally (using merge sort)
-	// l_sortPairs(&listPairs);
+	std::cout << '\n';
+	l_mergeSortPairs(listPairs, 0, (_n / 2) - 1);
+	pairsList::iterator pit1;
+	for (pit1 = listPairs.begin(); pit1 != listPairs.end(); ++pit1)
+		std::cout << (*pit1).first << " " << (*pit1).second << '\n';
+	if (listLast != -1)
+		std:: cout << listLast << '\n';
 	
 	// // create the main chain (b0 + all the a's)
 	// mainChain = l_initializeMainChain(&listPairs);
@@ -139,7 +178,7 @@ void	PmergeMe::_sortList()
 	
 	// // insert b's  from pairs to main chain based on orderOfInsertion
 	// // insert JacobNumber index -> go down until jacob before it.
-	// l_insertPendToMainChain(&mainChain, &pend);
+	// l_insertPendToMainChain(&mainChain, &pend); // using lower_bound 
 	
 	_listDuration = _getMicroseconds(t);
 }

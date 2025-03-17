@@ -25,6 +25,9 @@ class PmergeMe
 		void		_sortList();
 		pairsList	createListPairs();
 		void		l_sortEachPair(pairsList &listPairs);
+		void		l_mergeSortPairs(pairsList &listPairs, int begin, int end);
+		void		l_merge(pairsList &listPairs, int begin, int mid, int end);
+
 		// void		l_sortPairs(pairsList &listPairs);
 		// void		l_initializeMainChain(pairsList const &listPairs);
 		// void		l_initializePend(pairsList const &listPairs);
