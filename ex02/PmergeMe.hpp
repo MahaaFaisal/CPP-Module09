@@ -22,14 +22,14 @@ class PmergeMe
 		float _listDuration;
 		typedef std::list<std::pair<int, int> > pairsList;
 		int	listLast;
-		void		_sortList();
-		pairsList	createListPairs();
-		void		l_sortEachPair(pairsList &listPairs);
-		void		l_mergeSortPairs(pairsList &listPairs, int begin, int end);
-		void		l_merge(pairsList &listPairs, int begin, int mid, int end);
+		void			_sortList();
+		pairsList		createListPairs();
+		void			l_sortEachPair(pairsList &listPairs);
+		void			l_mergeSortPairs(pairsList &listPairs, int begin, int end);
+		void			l_merge(pairsList &listPairs, int begin, int mid, int end);
 		std::list<int>	l_initializeMainChain(pairsList const &listPairs);
 		std::list<int>	l_initializePend(pairsList const &listPairs);
-		void		l_insertPendToMainChain(std::list<int> &pend, std::list<int> &mainChain);
+		void			l_insertPendToMainChain(std::list<int> &pend, std::list<int> &mainChain);
 		std::list<int>	l_generateInsertionOrder(int lastNum);
 
 
@@ -37,14 +37,14 @@ class PmergeMe
 		float _vectorDuration;
 		typedef std::vector<std::pair<int, int> > pairsVector ;
 		int	vectorLast;
-		void		_sortVector();
-		pairsVector	createVectorPairs();
-		void		v_sortEachPair(pairsVector &vectorPairs);
-		void		v_mergeSortPairs(pairsVector &vectorPairs, int begin, int end);
-		void		v_merge(pairsVector &vectorPairs, int begin, int mid, int end);
-		void				v_insertPendToMainChain(std::vector<int> &pend, std::vector<int> &mainChain);
+		void				_sortVector();
+		pairsVector			createVectorPairs();
+		void				v_sortEachPair(pairsVector &vectorPairs);
+		void				v_mergeSortPairs(pairsVector &vectorPairs, int begin, int end);
+		void				v_merge(pairsVector &vectorPairs, int begin, int mid, int end);
 		std::vector<int>	v_initializeMainChain(pairsVector const &vectorPairs);
 		std::vector<int>	v_initializePend(pairsVector const &listVector);
+		void				v_insertPendToMainChain(std::vector<int> &pend, std::vector<int> &mainChain);
 		std::vector<int>	v_generateInsertionOrder(int lastNum);
 
 	public:
