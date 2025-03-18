@@ -27,22 +27,25 @@ class PmergeMe
 		void		l_sortEachPair(pairsList &listPairs);
 		void		l_mergeSortPairs(pairsList &listPairs, int begin, int end);
 		void		l_merge(pairsList &listPairs, int begin, int mid, int end);
+		std::list<int>	l_initializeMainChain(pairsList const &listPairs);
+		std::list<int>	l_initializePend(pairsList const &listPairs);
+		void		l_insertPendToMainChain(std::list<int> &pend, std::list<int> &mainChain);
+		std::list<int>	l_generateInsertionOrder(int lastNum);
 
-		// void		l_sortPairs(pairsList &listPairs);
-		// void		l_initializeMainChain(pairsList const &listPairs);
-		// void		l_initializePend(pairsList const &listPairs);
-		// void		l_insertPendToMainChain(std::list<int> pend, std::list<int> mainChain);
 
 		std::vector<int> _vector;
 		float _vectorDuration;
-		// typedef std::vector<pair<int, int>> pairsVector;
-		// void		_sortVector();
-		// pairsVector	createVectorPairs();
-		// void		v_sortEachPair(pairsVector &vectorPairs);
-		// void		v_sortPairs(pairsVector &vectorPairs);
-		// void		v_initializeMainChain(pairsVector const &VectorPairs);
-		// void		v_initializePend(pairsVector const &VectorPairs);
-		// void		v_insertPendToMainChain(std::vector<int> pend, std::vector<int> mainChain);
+		typedef std::vector<std::pair<int, int> > pairsVector ;
+		int	vectorLast;
+		void		_sortVector();
+		pairsVector	createVectorPairs();
+		void		v_sortEachPair(pairsVector &vectorPairs);
+		void		v_mergeSortPairs(pairsVector &vectorPairs, int begin, int end);
+		void		v_merge(pairsVector &vectorPairs, int begin, int mid, int end);
+		void				v_insertPendToMainChain(std::vector<int> &pend, std::vector<int> &mainChain);
+		std::vector<int>	v_initializeMainChain(pairsVector const &vectorPairs);
+		std::vector<int>	v_initializePend(pairsVector const &listVector);
+		std::vector<int>	v_generateInsertionOrder(int lastNum);
 
 	public:
 		PmergeMe();
@@ -51,7 +54,6 @@ class PmergeMe
 		~PmergeMe();
 
 		void	pushToContainers(int num);
-		void	printContainers();
 		void	sortContainers();
 
 		class NotValidNumException : public std::exception
