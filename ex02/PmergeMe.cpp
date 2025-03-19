@@ -36,10 +36,13 @@ void	PmergeMe::pushToContainers(int num)
 
 void	PmergeMe::sortContainers()
 {
-	_sortList();
-	_sortVector();
-	_printAfterSort();
-
+	if (_list.size() > 1)
+	{
+		_sortList();
+		_sortVector();
+	}
+	if (_list.size() >= 1)
+		_printAfterSort();
 }
 
 double	PmergeMe::_getMicroseconds(clock_t t)
