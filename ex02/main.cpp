@@ -23,9 +23,9 @@ int main(int argc, char **argv)
 		PmergeMe sorter;
 		populateSorterObject(argc, argv, sorter);
 		sorter.sortContainers();
-	}	
+	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
-	}                                                                                                      
+	}
 }

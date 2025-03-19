@@ -1,7 +1,6 @@
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe() : _n(0), _listDuration(0), _vectorDuration(0)
-{}
+PmergeMe::PmergeMe() : _n(0), _listDuration(0), _vectorDuration(0) {}
 
 PmergeMe::PmergeMe(PmergeMe &other)
 {
@@ -10,19 +9,18 @@ PmergeMe::PmergeMe(PmergeMe &other)
 
 PmergeMe &PmergeMe::operator=(PmergeMe &rhs)
 {
+	this->_n = rhs._n;
 	this->_original =  rhs._original;
 	this->_list = rhs._list;
 	this->_vector = rhs._vector;
 
 	this->_listDuration = rhs._listDuration;
 	this->_vectorDuration = rhs._vectorDuration;
+	
 	return *this;
 }
 
-PmergeMe::~PmergeMe()
-{
-	// std::cout << "PmergeMe Destructor\n";
-}
+PmergeMe::~PmergeMe() { }
 
 void	PmergeMe::pushToContainers(int num)
 {
@@ -50,28 +48,23 @@ double	PmergeMe::_getMicroseconds(clock_t t)
 	clock_t duration;
 
 	duration = clock() - t;
-    return (double)duration * 1000 / CLOCKS_PER_SEC;
+	return (double)duration * 1000 / CLOCKS_PER_SEC;
 }
 
 void	PmergeMe::_printAfterSort()
 {
-	std::cout << "Before:       ";
+	std::cout << "Before: ";
 	for (std::vector<int>::iterator it = _original.begin(); it != _original.end(); ++it)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
-	std::cout << "\nList After:   ";
-	for (std::list<int>::iterator it = _list.begin(); it != _list.end(); ++it)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-
-	std::cout << "\nVector After: ";
+	std::cout << "After: ";
 	for (std::vector<int>::iterator it = _vector.begin(); it != _vector.end(); ++it)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
 	std::cout << std::setprecision(5);
-	std::cout << "\nTime to process a range of " << _vector.size();
+	std::cout << "Time to process a range of " << _vector.size();
 	std::cout << " elements with std::vector : " << _vectorDuration << " us\n";
 	std::cout << "Time to process a range of " << _list.size();
 	std::cout << " elements with std::list : " << _listDuration << " us\n";
@@ -118,7 +111,6 @@ PmergeMe::pairsList PmergeMe::createListPairs()
 			listPairs.push_back(current);
 		}
 	}
-	pairsList::iterator pit;
 	return listPairs;
 }
 
@@ -152,12 +144,11 @@ void	PmergeMe::l_merge(pairsList &listPairs, int begin, int mid, int end)
 
 	while (left != midIt && right != endIt)
 	{
-		if (*left < *right)
+		if ((*left).first < (*right).first)
 			temp.push_back(*(left++));
 		else
 			temp.push_back(*(right++));
 	}
-
 	while (left != midIt)
 		temp.push_back(*(left++));
 
@@ -172,9 +163,8 @@ void	PmergeMe::l_merge(pairsList &listPairs, int begin, int mid, int end)
 std::list<int>	PmergeMe::l_initializeMainChain(pairsList const &listPairs)
 {
 	std::list<int> mainChain;
-	pairsList::const_iterator pit = std::next(listPairs.begin(), 0);
+	pairsList::const_iterator pit = listPairs.begin();
 
-	
 	mainChain.push_back((*pit).second);
 	for (pit = listPairs.begin(); pit != listPairs.end(); ++pit)
 		mainChain.push_back((*pit).first);
@@ -305,7 +295,7 @@ void	PmergeMe::v_merge(pairsVector &vectorPairs, int begin, int mid, int end)
 
 	while (left != midIt && right != endIt)
 	{
-		if (*left < *right)
+		if ((*left).first < (*right).first)
 			temp.push_back(*(left++));
 		else
 			temp.push_back(*(right++));
@@ -325,8 +315,7 @@ void	PmergeMe::v_merge(pairsVector &vectorPairs, int begin, int mid, int end)
 std::vector<int>	PmergeMe::v_initializeMainChain(pairsVector const &vectorPairs)
 {
 	std::vector<int> mainChain;
-	pairsVector::const_iterator pit = std::next(vectorPairs.begin(), 0);
-
+	pairsVector::const_iterator pit = vectorPairs.begin();
 	
 	mainChain.push_back((*pit).second);
 	for (pit = vectorPairs.begin(); pit != vectorPairs.end(); ++pit)
