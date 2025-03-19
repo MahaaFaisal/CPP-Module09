@@ -21,7 +21,6 @@ class BitcoinExchange
 
 	public:
 		BitcoinExchange();
-		BitcoinExchange(char *db);
 		BitcoinExchange(BitcoinExchange &other);
 		BitcoinExchange &operator=(BitcoinExchange &rhs);
 		~BitcoinExchange();
