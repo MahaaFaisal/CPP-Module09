@@ -12,14 +12,11 @@ RPN::RPN(RPN &other)
 
 RPN &RPN::operator=(RPN &rhs)
 {
-	(void) rhs;
+	this->_calculator = rhs._calculator;
 	return (*this);
 }
 
-RPN::~RPN()
-{
-
-}
+RPN::~RPN() { }
 
 bool RPN::_isDigit(char x)
 {
@@ -85,7 +82,7 @@ double RPN::calculateResult(std::string expression)
 				throw std::invalid_argument("invalid expression");	
 		}
 		else
-				throw std::invalid_argument("invalid expression");	
+			throw std::invalid_argument("invalid expression");	
 		
 	}
 	if (_calculator.size() > 1)
@@ -97,5 +94,4 @@ double RPN::calculateResult(std::string expression)
 	double result = _calculator.top();
 	_calculator.pop();
 	return (result);
-
 }
