@@ -137,10 +137,16 @@ void	PmergeMe::l_mergeSortPairs(pairsList &listPairs, int begin, int end)
 void	PmergeMe::l_merge(pairsList &listPairs, int begin, int mid, int end)
 {
 	pairsList temp;
-	pairsList::iterator left = std::next(listPairs.begin(), begin);
-	pairsList::iterator midIt = std::next(listPairs.begin(), mid + 1);
-	pairsList::iterator right = midIt;
-	pairsList::iterator endIt = std::next(listPairs.begin(), end + 1);
+
+	pairsList::iterator left = listPairs.begin();
+    std::advance(left, begin);
+    
+    pairsList::iterator midIt = listPairs.begin();
+    std::advance(midIt, mid + 1);
+    
+    pairsList::iterator right = midIt;
+    pairsList::iterator endIt = listPairs.begin();
+    std::advance(endIt, end + 1);
 
 	while (left != midIt && right != endIt)
 	{
@@ -155,7 +161,8 @@ void	PmergeMe::l_merge(pairsList &listPairs, int begin, int mid, int end)
 	while (right != endIt)
 		temp.push_back(*(right++));
 
-	pairsList::iterator it = std::next(listPairs.begin(), begin);
+	pairsList::iterator it = listPairs.begin();
+    std::advance(it, begin);
 	for (pairsList::iterator tempIt = temp.begin(); tempIt != temp.end(); ++tempIt)
 		*(it++) = *tempIt;
 }
@@ -181,24 +188,26 @@ std::list<int>	PmergeMe::l_initializePend(pairsList const &listPairs)
 	return pend;
 }
 
-void	PmergeMe::l_insertPendToMainChain(std::list<int> &pend, std::list<int> &mainChain)
+void PmergeMe::l_insertPendToMainChain(std::list<int> &pend, std::list<int> &mainChain)
 {
-	std::list<int> insertionOrder = l_generateInsertionOrder(_n);
-	std::list<int>::iterator index = insertionOrder.begin();
+    std::list<int> insertionOrder = l_generateInsertionOrder(_n);
+    std::list<int>::iterator index = insertionOrder.begin();
 
-	for (index = insertionOrder.begin(); index != insertionOrder.end(); ++index)
-	{
-		if (*index >= (int)pend.size())
-			continue;
-		std::list<int>::iterator element = std::next(pend.begin(), *index);
-		std::list<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), *element);
-		mainChain.insert(lowerBound, *element);
-	}
-	if (listLast != -1)
-	{
-		std::list<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), listLast);
-		mainChain.insert(lowerBound, listLast);
-	}
+    for (index = insertionOrder.begin(); index != insertionOrder.end(); ++index)
+    {
+        if (*index >= (int)pend.size())
+            continue;
+        std::list<int>::iterator element = pend.begin();
+        std::advance(element, *index);
+
+        std::list<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), *element);
+        mainChain.insert(lowerBound, *element);
+    }
+    if (listLast != -1)
+    {
+        std::list<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), listLast);
+        mainChain.insert(lowerBound, listLast);
+    }
 }
 
 std::list<int>	PmergeMe::l_generateInsertionOrder(int lastNum)
@@ -285,32 +294,34 @@ void	PmergeMe::v_mergeSortPairs(pairsVector &vectorPairs, int begin, int end)
 	v_merge(vectorPairs, begin, mid, end);
 }
 
-void	PmergeMe::v_merge(pairsVector &vectorPairs, int begin, int mid, int end)
+void PmergeMe::v_merge(pairsVector &vectorPairs, int begin, int mid, int end)
 {
-	pairsVector temp;
-	pairsVector::iterator left = std::next(vectorPairs.begin(), begin);
-	pairsVector::iterator midIt = std::next(vectorPairs.begin(), mid + 1);
-	pairsVector::iterator right = midIt;
-	pairsVector::iterator endIt = std::next(vectorPairs.begin(), end + 1);
+    pairsVector temp;
+    pairsVector::iterator left = vectorPairs.begin();
+    std::advance(left, begin);
+    pairsVector::iterator midIt = vectorPairs.begin();
+    std::advance(midIt, mid + 1);
+    pairsVector::iterator right = midIt;
+    pairsVector::iterator endIt = vectorPairs.begin();
+    std::advance(endIt, end + 1);
 
-	while (left != midIt && right != endIt)
-	{
-		if ((*left).first < (*right).first)
-			temp.push_back(*(left++));
-		else
-			temp.push_back(*(right++));
-	}
-
-	while (left != midIt)
-		temp.push_back(*(left++));
-
-	while (right != endIt)
-		temp.push_back(*(right++));
-
-	pairsVector::iterator it = std::next(vectorPairs.begin(), begin);
-	for (pairsVector::iterator tempIt = temp.begin(); tempIt != temp.end(); ++tempIt)
-		*(it++) = *tempIt;
+    while (left != midIt && right != endIt)
+    {
+        if ((*left).first < (*right).first)
+            temp.push_back(*(left++));
+        else
+            temp.push_back(*(right++));
+    }
+    while (left != midIt)
+        temp.push_back(*(left++));
+    while (right != endIt)
+        temp.push_back(*(right++));
+    pairsVector::iterator it = vectorPairs.begin();
+    std::advance(it, begin);
+    for (pairsVector::iterator tempIt = temp.begin(); tempIt != temp.end(); ++tempIt)
+        *(it++) = *tempIt;
 }
+
 
 std::vector<int>	PmergeMe::v_initializeMainChain(pairsVector const &vectorPairs)
 {
@@ -333,24 +344,25 @@ std::vector<int>	PmergeMe::v_initializePend(pairsVector const &vectorPairs)
 	return pend;
 }
 
-void	PmergeMe::v_insertPendToMainChain(std::vector<int> &pend, std::vector<int> &mainChain)
+void PmergeMe::v_insertPendToMainChain(std::vector<int> &pend, std::vector<int> &mainChain)
 {
-	std::vector<int> insertionOrder = v_generateInsertionOrder(_n);
-	std::vector<int>::iterator index = insertionOrder.begin();
+    std::vector<int> insertionOrder = v_generateInsertionOrder(_n);
+    std::vector<int>::iterator index = insertionOrder.begin();
 
-	for (index = insertionOrder.begin(); index != insertionOrder.end(); ++index)
-	{
-		if (*index >= (int)pend.size())
-			continue;
-		std::vector<int>::iterator element = std::next(pend.begin(), *index);
-		std::vector<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), *element);
-		mainChain.insert(lowerBound, *element);
-	}
-	if (listLast != -1)
-	{
-		std::vector<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), listLast);
-		mainChain.insert(lowerBound, listLast);
-	}
+    for (index = insertionOrder.begin(); index != insertionOrder.end(); ++index)
+    {
+        if (*index >= (int)pend.size())
+            continue;
+        std::vector<int>::iterator element = pend.begin();
+        std::advance(element, *index);
+        std::vector<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), *element);
+        mainChain.insert(lowerBound, *element);
+    }
+    if (listLast != -1)
+    {
+        std::vector<int>::iterator lowerBound = std::lower_bound(mainChain.begin(), mainChain.end(), listLast);
+        mainChain.insert(lowerBound, listLast);
+    }
 }
 
 std::vector<int>	PmergeMe::v_generateInsertionOrder(int lastNum)
