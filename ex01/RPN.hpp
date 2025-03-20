@@ -13,7 +13,7 @@ class RPN
 		std::stack<double> _calculator;
 		bool _isOperand(char x);
 		bool _isDigit(char x);
-		double _poppedResult(int num1, int num2, char operand);
+		double _poppedResult(double num1, double num2, char operand);
 	
 	public:
 		RPN();

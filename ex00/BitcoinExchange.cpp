@@ -21,7 +21,7 @@ BitcoinExchange::~BitcoinExchange() { }
 
 void	BitcoinExchange::_parseDb(std::string db, char delimeter)
 {
-	std::fstream dbStream(db);
+	std::fstream dbStream(db.c_str());
 	std::string date;
 	std::string xrateString;
 
@@ -103,7 +103,7 @@ double	BitcoinExchange::_parseValue(std::string valueString)
 
 void BitcoinExchange::calculateValuesFile(std::string file)
 {
-	std::fstream dbStream(file);
+	std::fstream dbStream(file.c_str());
 	std::string date;
 	std::string valueString;
 	double		value;
@@ -151,7 +151,8 @@ void BitcoinExchange::calculateValue(std::string date, double value)
 	else
 	{
 		std::map<std::string, float>::iterator it = _exchangeDb.lower_bound(date);
-		it--;
+		if ((*it).first != date)
+			it--;
 		std::cout << date << " => " << value << " = " << value * it->second << std::endl;
 	}
 }

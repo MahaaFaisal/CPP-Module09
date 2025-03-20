@@ -32,7 +32,7 @@ bool RPN::_isOperand(char x)
 	return 0;
 }
 
-double RPN::_poppedResult(int num1, int num2, char operand)
+double RPN::_poppedResult(double num1, double num2, char operand)
 {
 	std::cout << num1 << " " << operand << " " << num2 << " = ";
 	if (operand == '+')
@@ -72,9 +72,9 @@ double RPN::calculateResult(std::string expression)
 				_calculator.push(atoi(word.c_str()));
 			else if (_isOperand(word[0]) && _calculator.size() > 1)
 			{
-				int num2 = _calculator.top();
+				double num2 = _calculator.top();
 				_calculator.pop();
-				int num1 = _calculator.top();
+				double num1 = _calculator.top();
 				_calculator.pop();
 				_calculator.push(_poppedResult(num1, num2, word[0]));
 			}
