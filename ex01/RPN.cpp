@@ -34,28 +34,15 @@ bool RPN::_isOperand(char x)
 
 double RPN::_poppedResult(double num1, double num2, char operand)
 {
-	std::cout << num1 << " " << operand << " " << num2 << " = ";
 	if (operand == '+')
-	{
-		std::cout << num1 + num2 << std::endl;
 		return num1 + num2;
-	}
 	if (operand == '-')
-	{
-		std::cout << num1 - num2 << std::endl;
 		return num1 - num2;
-	}
 	if (operand == '*')
-	{
-		std::cout << num1 * num2 << std::endl;
 		return num1 * num2;
-	}
 	if (operand == '/')
-	{
-		std::cout << num1 / num2 << std::endl;
 		return num1 / num2;
 
-	}
 	throw std::invalid_argument("invalid expression");	
 }
 
