@@ -65,12 +65,11 @@ void	BitcoinExchange::_parseDate(std::string date)
 bool BitcoinExchange::_checkDateValidity(int year, int month, int day)
 {
 	int longerMonthsArr [7] = {1, 3, 5, 7, 8, 10, 12};
-	std::vector<int> longerMonths(longerMonthsArr, longerMonthsArr + 7);
 	if (year < 2009 || year > 2024
 		|| month < 1 || month > 12
 		|| day < 1 || day > 31
-		|| (std::find(longerMonths.begin(), longerMonths.end(), month) == longerMonths.end()
-		&&	day == 31))
+		|| (std::find(longerMonthsArr, longerMonthsArr + 7, month) == longerMonthsArr + 7
+			&&	day == 31))
 	{
 		std::cout << "Error: bad input => " << year << "-" << month << "-" << day << std::endl; 
 		return (0);
@@ -135,10 +134,7 @@ void BitcoinExchange::calculateValuesFile(std::string file)
 			}
 			calculateValue(date, value);
 		}
-		catch(const std::exception& e)
-		{
-			std::cout << "Error: bad input =>" << date << '\n';
-		}
+		catch(const std::exception& e) {}
 	}
 }
 
